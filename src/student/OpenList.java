@@ -32,7 +32,7 @@ public class OpenList extends AbstractOpenList {
     }
 
     public SavedNode poll() {
-        System.out.println("Poll openList: " + openList.size());
+        //System.out.println("Poll openList: " + openList.size());
         return openList.poll();
     }
 

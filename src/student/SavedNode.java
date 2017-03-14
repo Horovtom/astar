@@ -7,22 +7,22 @@ import eu.superhub.wp5.planner.planningstructure.GraphNode;
  */
 public class SavedNode {
     private GraphNode node;
-    private GraphNode previous;
+    private SavedNode previous;
     private double hx;
     private double gx;
 
-    public SavedNode(GraphNode node, GraphNode previous, double gx, double hx) {
+    public SavedNode(GraphNode node, SavedNode previous, double gx, double hx) {
         this.node = node;
         this.hx = hx;
         this.gx = gx;
         this.previous = previous;
     }
 
-    public GraphNode getPrevious() {
+    public SavedNode getPrevious() {
         return previous;
     }
 
-    public void setPrevious(GraphNode previous) {
+    public void setPrevious(SavedNode previous) {
         this.previous = previous;
     }
 

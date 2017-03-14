@@ -37,7 +37,9 @@ public class Planner implements PlannerInterface {
 
         while (finalNode == null && !openList.isEmpty()) updateOpenList();
 
-        return composePath();
+        List<GraphEdge> graphEdges = composePath();
+
+        return graphEdges;
         //throw new NotImplementedException();
     }
 
@@ -46,7 +48,8 @@ public class Planner implements PlannerInterface {
         SavedNode current = finalNode;
 
         while (current.getNode().getId() != origin.getId()) {
-            path.add(graph.getEdge(current.getPrevious().getId(), current.getNode().getId()));
+            path.add(graph.getEdge(current.getPrevious().getNode().getId(), current.getNode().getId()));
+            current = current.getPrevious();
         }
         Collections.reverse(path);
         return path;
@@ -61,11 +64,13 @@ public class Planner implements PlannerInterface {
         closedList.add(toExpand.getNode().getId());
 
         List<GraphEdge> nodeOutcomingEdges = graph.getNodeOutcomingEdges(toExpand.getNode().getId());
+        if (nodeOutcomingEdges == null) return;
+
         for (GraphEdge nodeOutcomingEdge : nodeOutcomingEdges) {
             if (!nodeOutcomingEdge.getPermittedModes().contains(PermittedMode.CAR)) continue;
             GraphNode node = graph.getNodeByNodeId(nodeOutcomingEdge.getToNodeId());
             if (closedList.contains(node.getId())) continue;
-            SavedNode newSavedNode = new SavedNode(node, toExpand.getNode(), getGx(nodeOutcomingEdge, toExpand.getGx()), getHx(node));
+            SavedNode newSavedNode = new SavedNode(node, toExpand, getGx(nodeOutcomingEdge, toExpand.getGx()), getHx(node));
             openList.add(newSavedNode);
         }
     }
@@ -86,7 +91,8 @@ public class Planner implements PlannerInterface {
      * A simple heuristic, returning time to arrive at fastest possible speed by flight distance
      */
     private double getHx(GraphNode node) {
-        return (Math.floor(Utils.distanceInKM(node, destination) * fastestKPH));
+        //return 0;
+        return (Utils.distanceInKM(node, destination) / fastestKPH) ;
     }
 
     /**

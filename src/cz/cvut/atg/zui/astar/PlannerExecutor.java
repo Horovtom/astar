@@ -40,8 +40,18 @@ public class PlannerExecutor {
         System.out.println("Graph loaded.");
 
         //picks origin and destination nodes (feel free to modify)
-        GraphNode origin = newroadGraph.getNodeByNodeId(13823646l);
-        GraphNode destination = newroadGraph.getNodeByNodeId(188755778);
+        GraphNode origin =
+                //newroadGraph.getNodeByNodeId(13823646l);
+                //newroadGraph.getNodeByNodeId(26746953);
+                newroadGraph.getNodeByNodeId(243081231);
+                //newroadGraph.getNodeByNodeId(42205836);
+
+
+        GraphNode destination =
+                //newroadGraph.getNodeByNodeId(188755778);
+                //newroadGraph.getNodeByNodeId(1037726044);
+                newroadGraph.getNodeByNodeId(21728749);
+                //newroadGraph.getNodeByNodeId(42205952);
 
         System.out.println("Planning between: "+ origin.getId() + " and "+ destination.getId());
 
