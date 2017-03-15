@@ -37,21 +37,47 @@ public class PlannerExecutor {
         Graph<GraphNode, GraphEdge> newroadGraph = deserialize(mapFileName);
         RoadGraph roadGraph = new RoadGraph(newroadGraph);
 
+//        GraphBuilder<GraphNode, GraphEdge> builder = new GraphBuilder<>();
+//
+//        GraphNode node = new GraphNode(1, new GPSLocation(100,100), "Starting node", null);
+//        builder.addNode(node);
+//        node = new GraphNode(2, new GPSLocation(101, 100), "", null);
+//        builder.addNode(node);
+//        node = new GraphNode(3, new GPSLocation(100, 101), "", null);
+//        builder.addNode(node);
+//        node = new GraphNode(4, new GPSLocation(101, 101), "", null);
+//        builder.addNode(node);
+//
+//        HashSet<PermittedMode> set = new HashSet<PermittedMode>();
+//        set.add(PermittedMode.CAR);
+//        GraphEdge edge = new GraphEdge(1, 2, 5, 10, set);
+//        builder.addEdge(edge);
+//        edge = new GraphEdge(1, 3, 4, 10, set);
+//        builder.addEdge(edge);
+//        edge = new GraphEdge(2, 4, 0, 10, set);
+//        builder.addEdge(edge);
+//        edge = new GraphEdge(3, 4, 2, 10, set);
+//        builder.addEdge(edge);
+//        Graph<GraphNode, GraphEdge> newroadGraph = builder.createGraph();
+//        RoadGraph roadGraph = new RoadGraph(newroadGraph);
+
         System.out.println("Graph loaded.");
 
         //picks origin and destination nodes (feel free to modify)
         GraphNode origin =
                 //newroadGraph.getNodeByNodeId(13823646l);
-                //newroadGraph.getNodeByNodeId(26746953);
-                newroadGraph.getNodeByNodeId(243081231);
+                newroadGraph.getNodeByNodeId(26746953);
+                //newroadGraph.getNodeByNodeId(243081231);
                 //newroadGraph.getNodeByNodeId(42205836);
+                //newroadGraph.getNodeByNodeId(1);
 
 
         GraphNode destination =
                 //newroadGraph.getNodeByNodeId(188755778);
-                //newroadGraph.getNodeByNodeId(1037726044);
-                newroadGraph.getNodeByNodeId(21728749);
+                newroadGraph.getNodeByNodeId(1037726044);
+                //newroadGraph.getNodeByNodeId(21728749);
                 //newroadGraph.getNodeByNodeId(42205952);
+                //newroadGraph.getNodeByNodeId(4);
 
         System.out.println("Planning between: "+ origin.getId() + " and "+ destination.getId());
 

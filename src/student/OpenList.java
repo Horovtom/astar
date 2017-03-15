@@ -3,19 +3,31 @@ package student;
 import cz.cvut.atg.zui.astar.AbstractOpenList;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 
 /**
  * Created by lactosis on 14.3.17.
  */
 public class OpenList extends AbstractOpenList {
-    private PriorityQueue<SavedNode> openList = new PriorityQueue<>((o1, o2) -> (int) (o1.getFx() - o2.getFx()));
+    Comparator<SavedNode> comp = new Comparator<SavedNode>() {
+        @Override
+        public int compare(SavedNode o1, SavedNode o2) {
+            if (o1.getFx() == o2.getFx()) {
+                return Double.compare(o1.getHx(), o2.getHx());
+            } else {
+                return Double.compare(o1.getFx(), o2.getFx());
+            }
+        }
+    };
+
+    private PriorityQueue<SavedNode> openList = new PriorityQueue<>(comp);
 
     @Override
     protected boolean addItem(Object item) {
         SavedNode node = (SavedNode) item;
         if (!openList.contains(node)) {
-            openList.add(node);
+            openList.offer(node);
             return true;
         }
         return false;
@@ -29,6 +41,19 @@ public class OpenList extends AbstractOpenList {
             }
         }
         return null;
+    }
+
+    public void refreshNode(SavedNode node) {
+        for (SavedNode savedNode : openList) {
+            if (savedNode.getNode().equals(node.getNode())) {
+                if (savedNode.getFx() > node.getFx()) {
+                    openList.remove(savedNode);
+                    openList.add(node);
+                    return;
+                }
+            }
+        }
+        add(node);
     }
 
     public SavedNode poll() {

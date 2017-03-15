@@ -8,15 +8,12 @@ import eu.superhub.wp5.planner.planningstructure.GraphEdge;
 import eu.superhub.wp5.planner.planningstructure.GraphNode;
 import eu.superhub.wp5.planner.planningstructure.PermittedMode;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 public class Planner implements PlannerInterface {
 
     private RoadGraph graph = null;
-    private double fastestKPH = 0;
+    private double fastestKPH = 120;
     private GraphNode destination = null;
     private GraphNode origin = null;
     private OpenList openList = null;
@@ -29,18 +26,16 @@ public class Planner implements PlannerInterface {
         this.destination = destination;
         this.origin = origin;
         this.closedList = new TreeSet<>();
-        resetFastestAllowedKmph();
 
         openList = (OpenList) getOpenList();
         //Add first node to the open list...
-        openList.add(new SavedNode(origin, null, getGx(origin, null, 0), getHx(origin)));
+        openList.add(new SavedNode(origin, null, 0, getHx(origin)));
 
         while (finalNode == null && !openList.isEmpty()) updateOpenList();
 
         List<GraphEdge> graphEdges = composePath();
 
         return graphEdges;
-        //throw new NotImplementedException();
     }
 
     private List<GraphEdge> composePath() {
@@ -55,10 +50,12 @@ public class Planner implements PlannerInterface {
         return path;
     }
 
+
     private void updateOpenList(){
         SavedNode toExpand = openList.poll();
         if (toExpand.getNode().equals(destination)) {
             finalNode = toExpand;
+            return;
         }
 
         closedList.add(toExpand.getNode().getId());
@@ -69,9 +66,12 @@ public class Planner implements PlannerInterface {
         for (GraphEdge nodeOutcomingEdge : nodeOutcomingEdges) {
             if (!nodeOutcomingEdge.getPermittedModes().contains(PermittedMode.CAR)) continue;
             GraphNode node = graph.getNodeByNodeId(nodeOutcomingEdge.getToNodeId());
+
             if (closedList.contains(node.getId())) continue;
+
             SavedNode newSavedNode = new SavedNode(node, toExpand, getGx(nodeOutcomingEdge, toExpand.getGx()), getHx(node));
-            openList.add(newSavedNode);
+
+            openList.refreshNode(newSavedNode);
         }
     }
 
@@ -91,7 +91,6 @@ public class Planner implements PlannerInterface {
      * A simple heuristic, returning time to arrive at fastest possible speed by flight distance
      */
     private double getHx(GraphNode node) {
-        //return 0;
         return (Utils.distanceInKM(node, destination) / fastestKPH) ;
     }
 
@@ -107,7 +106,7 @@ public class Planner implements PlannerInterface {
     }
 
     private double getGx(GraphEdge edge, double previousGx) {
-        return ((edge.getLengthInMetres() / 1000)/edge.getAllowedMaxSpeedInKmph()) + previousGx;
+        return ((edge.getLengthInMetres() / 1000) / edge.getAllowedMaxSpeedInKmph()) + previousGx;
     }
 
     @Override

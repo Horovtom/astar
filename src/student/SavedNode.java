@@ -10,11 +10,14 @@ public class SavedNode {
     private SavedNode previous;
     private double hx;
     private double gx;
+    private double fx;
+
 
     public SavedNode(GraphNode node, SavedNode previous, double gx, double hx) {
         this.node = node;
         this.hx = hx;
         this.gx = gx;
+        this.fx = gx+hx;
         this.previous = previous;
     }
 
@@ -31,7 +34,7 @@ public class SavedNode {
     }
 
     public double getFx() {
-        return gx + hx;
+        return fx;
     }
 
     public void setNode(GraphNode node) {
@@ -44,6 +47,7 @@ public class SavedNode {
 
     public void setGx(double gx) {
         this.gx = gx;
+        fx = gx + hx;
     }
 
     public double getHx() {
@@ -52,10 +56,16 @@ public class SavedNode {
 
     public void setHx(double hx) {
         this.hx = hx;
+        fx = gx + hx;
     }
 
     @Override
     public String toString() {
-        return "SavedNode -  Node: " + node + " F(x)=" + getFx() + " Previous: " + previous;
+        return "SavedNode - F(x)=" + getFx() + " Node: " + node + " Previous: " + previous;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return ((SavedNode) obj).getNode().equals(getNode());
     }
 }
